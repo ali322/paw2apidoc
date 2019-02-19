@@ -1,0 +1,32 @@
+{
+  "name": "apidoc-generator",
+  "version": "0.0.1",
+  "description": "apidoc generator for Paw",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rollup --config rollup.conf.js",
+    "test": "BABEL_ENV=test ava"
+  },
+  "ava": {
+    "failFast": true
+  },
+  "keywords": [
+    "Paw"
+  ],
+  "author": "alichen",
+  "license": "MIT",
+  "dependencies": {
+    "handlebars": "^4.1.0"
+  },
+  "devDependencies": {
+    "ava": "^1.2.1",
+    "babel-core": "^6.26.3",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "eslint": "^5.14.1",
+    "rollup": "^1.2.1",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^4.0.0"
+  }
+}

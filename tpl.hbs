@@ -1,0 +1,20 @@
+/**
+ * @api  { {{method}} } {{url}} {{request_name}}
+ * @apiGroup {{request_group}}
+ *
+ 	{{#each headers}}
+ * @apiHeader	{ {{type}} }	{{name}}	<description for {{name}}>
+	{{/each}}
+ *
+	{{#each params}}
+ * @apiParam	{ {{type}} }	{{name}}	<description for {{name}}>
+ 	{{/each}}
+ *
+	{{#each response}}
+ * @apiSuccess	{ {{type}} }	{{name}}	<description for {{name}}>
+ 	{{/each}}
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
+ * {{{responseExample}}}
+ */
