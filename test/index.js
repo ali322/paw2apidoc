@@ -8,6 +8,6 @@ const rawResponse = {
 
 test('foo', t => {
   let result = []
-  extractKeyNameAndType(rawResponse, result)
+  extractKeyNameAndType(rawResponse, {},result)
   t.is(result.length, 2)
 })
