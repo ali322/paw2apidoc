@@ -1,5 +1,5 @@
 # APIDoc Generator for Paw
-[![Build Status](https://travis-ci.org/ali322/apidoc-generator.svg?branch=master)](https://travis-ci.org/ali322/apidoc-generator)
+[![Build Status](https://travis-ci.org/ali322/paw2apidoc.svg?branch=master)](https://travis-ci.org/ali322/paw2apidoc)
 
 generate raw RESTFull API documentation for [APIDoc](https://github.com/apidoc/apidoc)
 
