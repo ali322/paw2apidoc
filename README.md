@@ -5,7 +5,7 @@ generate raw RESTFull API documentation for [APIDoc](https://github.com/apidoc/a
 
 
 ## Installation
-Open `Paw -> Extensions -> Open Extensions Directory`, Clone this repo into extension folder as `org.alilab.apiDocCodeGenerator`
+Open `Paw -> Extensions -> Open Extensions Directory`, Clone this repo into extension folder as `org.alilab.apiDocDefinitionGenerator`
 
 ## Useage
 

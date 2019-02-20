@@ -52,33 +52,51 @@ function getType(val) {
   return 'unknown'
 }
 
-function traverse(obj, parentKey = null, result) {
+function traverse(obj, parentKey = null, desc, result) {
   if (isArray(obj) && obj.length > 0) {
     if (!parentKey) {
       result.push({
         name: 'root',
+        desc: 'Root',
         type: 'array'
       })
     }
     const parent = parentKey ? parentKey : 'root'
     let objOfArray = obj[0]
-    traverse(objOfArray, parent, result)
+    traverse(objOfArray, parent, desc, result)
   } else {
     for (let key in obj) {
       const parent = parentKey ? parentKey + '.' : ''
+      const parentDesc = (parentKey || '')
+        .split('.')
+        .map(v => desc[v] || v).join('.')
+      const curDesc = desc[key] || key
       result.push({
         name: parent + key,
+        desc: parentDesc ? `${parentDesc}.${curDesc}` : curDesc,
         type: getType(obj[key])
       })
       if (obj[key] !== null && typeof obj[key] === 'object') {
-        traverse(obj[key], parent + key, result)
+        traverse(obj[key], parent + key, desc, result)
       }
     }
   }
 }
 
-function extractKeyNameAndType(obj, result) {
-  traverse(obj, null, result)
+function extractKeyNameAndType(obj, desc, result) {
+  traverse(obj, null, desc, result)
 }
 
-module.exports = extractKeyNameAndType
+function formatedDesc(val) {
+  let ret = {}
+  for (let i in val) {
+    let kv = val[i]
+    ret[kv[0]] = kv[1]
+  }
+  return ret
+}
+
+module.exports = {
+  extractKeyNameAndType,
+  formatedDesc
+}

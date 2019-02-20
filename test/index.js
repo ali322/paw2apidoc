@@ -1,5 +1,5 @@
 import test from 'ava'
-const extractKeyNameAndType = require('../src/util')
+const { extractKeyNameAndType } = require('../src/util')
 
 const rawResponse = {
   name: 'foo',

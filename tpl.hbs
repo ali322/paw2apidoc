@@ -1,20 +1,23 @@
 /**
  * @api  { {{method}} } {{url}} {{request_name}}
+ * @apiName {{request_name}}
+ {{#if request_description}}
+ * @apiDesciption {{request_description}}
+ {{/if}}
  * @apiGroup {{request_group}}
  *
  	{{#each headers}}
- * @apiHeader	{ {{type}} }	{{name}}	<description for {{name}}>
+ * @apiHeader	{ {{type}} }	{{name}}	{{desc}}
 	{{/each}}
  *
 	{{#each params}}
- * @apiParam	{ {{type}} }	{{name}}	<description for {{name}}>
+ * @apiParam	{ {{type}} }	{{name}}	{{desc}}
  	{{/each}}
- *
 	{{#each response}}
- * @apiSuccess	{ {{type}} }	{{name}}	<description for {{name}}>
+ * @apiSuccess ({{../successGroup}}) { {{type}} } {{name}} {{desc}}
  	{{/each}}
  *
- * @apiSuccessExample {json} Success-Response:
+ * @apiSuccessExample {json} {{successExampleTitle}}
  * HTTP/1.1 200 OK
  * {{{responseExample}}}
  */

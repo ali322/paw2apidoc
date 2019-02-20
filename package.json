@@ -1,7 +1,7 @@
 {
-  "name": "apidoc-generator",
+  "name": "paw2apidoc",
   "version": "0.0.1",
-  "description": "apidoc generator for Paw",
+  "description": "APIDoc generator for Paw",
   "main": "dist/index.js",
   "scripts": {
     "build": "rollup --config rollup.conf.js",

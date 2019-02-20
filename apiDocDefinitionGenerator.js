@@ -57,36 +57,56 @@
     return 'unknown'
   }
 
-  function traverse(obj, parentKey = null, result) {
+  function traverse(obj, parentKey = null, desc, result) {
     if (isArray(obj) && obj.length > 0) {
       if (!parentKey) {
         result.push({
           name: 'root',
+          desc: 'Root',
           type: 'array'
         });
       }
       const parent = parentKey ? parentKey : 'root';
       let objOfArray = obj[0];
-      traverse(objOfArray, parent, result);
+      traverse(objOfArray, parent, desc, result);
     } else {
       for (let key in obj) {
         const parent = parentKey ? parentKey + '.' : '';
+        const parentDesc = (parentKey || '')
+          .split('.')
+          .map(v => desc[v] || v).join('.');
+        const curDesc = desc[key] || key;
         result.push({
           name: parent + key,
+          desc: parentDesc ? `${parentDesc}.${curDesc}` : curDesc,
           type: getType(obj[key])
         });
         if (obj[key] !== null && typeof obj[key] === 'object') {
-          traverse(obj[key], parent + key, result);
+          traverse(obj[key], parent + key, desc, result);
         }
       }
     }
   }
 
-  function extractKeyNameAndType(obj, result) {
-    traverse(obj, null, result);
+  function extractKeyNameAndType(obj, desc, result) {
+    traverse(obj, null, desc, result);
   }
 
-  var util = extractKeyNameAndType;
+  function formatedDesc(val) {
+    let ret = {};
+    for (let i in val) {
+      let kv = val[i];
+      ret[kv[0]] = kv[1];
+    }
+    return ret
+  }
+
+  var util = {
+    extractKeyNameAndType,
+    formatedDesc
+  };
+  var util_1 = util.extractKeyNameAndType;
+  var util_2 = util.formatedDesc;
 
   var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -3994,8 +4014,8 @@
   }
   exports.computeSourceURL = computeSourceURL;
   });
-  var util_1 = util$1.getArg;
-  var util_2 = util$1.urlParse;
+  var util_1$1 = util$1.getArg;
+  var util_2$1 = util$1.urlParse;
   var util_3 = util$1.urlGenerate;
   var util_4 = util$1.normalize;
   var util_5 = util$1.join;
@@ -7845,6 +7865,9 @@
 
   class APIDocGenerator {
     generate(context, requests, options) {
+      const desc = util_2(options.inputs['desc']);
+      const successGroup = options.inputs['successGroup'];
+      const successExampleTitle = options.inputs['successExampleTitle'];
       let output = [];
       for (let i in requests) {
         let headers = [];
@@ -7855,22 +7878,24 @@
         const exchange = request.getLastExchange();
         const body = exchange.responseBody;
         if (exchange.responseStatusCode === 200 && body) {
-          util(JSON.parse(body), response);
+          util_1(JSON.parse(body), desc, response);
         }
-        util(request.headers, headers);
-        util(request.urlParameters, params);
-        util(request.jsonBody, params);
+        util_1(request.headers, desc, headers);
+        util_1(request.urlParameters, desc, params);
+        util_1(request.jsonBody, desc, params);
 
         let view = {
+          url: request.urlBase,
+          method: request.method,
+          request_group: request.parent ? request.parent.name : `...`,
+          request_name: request.name,
+          request_description: request.description,
           headers,
           params,
           response,
           responseExample: JSON.stringify(JSON.parse(body), null, 4),
-          method: request.method,
-          request_name: request.name,
-          request_description: request.description,
-          request_group: request.parent ? request.parent.name : `...`,
-          url: request.urlBase
+          successGroup,
+          successExampleTitle
         };
         const tpl = handlebars$1.compile(readFile('./tpl.hbs'));
         output.push(tpl(view));
@@ -7879,10 +7904,25 @@
     }
   }
 
-  APIDocGenerator.identifier = 'org.alilab.apiDocCodeGenerator';
-  APIDocGenerator.title = 'ApiDoc Paw Generator';
+  APIDocGenerator.identifier = 'org.alilab.apiDocDefinitionGenerator';
+  APIDocGenerator.title = 'APIDoc definition Generator';
   APIDocGenerator.languageHighlighter = 'javascript';
   APIDocGenerator.fileExtension = 'js';
+  APIDocGenerator.inputs = [
+    InputField('desc', 'Description for Field', 'KeyValueList', {
+      keyName: 'Field',
+      valueName: 'Desc',
+      persisted: true
+    }),
+    InputField('successGroup', '@apiSuccess group', 'String', {
+      persisted: true,
+      defaultValue: 'Success'
+    }),
+    InputField('successExampleTitle', '@apiSuccessExample title', 'String', {
+      persisted: true,
+      defaultValue: 'Success Response'
+    }),
+  ];
 
   registerCodeGenerator(APIDocGenerator);
 
